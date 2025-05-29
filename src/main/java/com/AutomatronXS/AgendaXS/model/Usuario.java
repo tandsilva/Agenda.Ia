@@ -1,53 +1,57 @@
 package com.AutomatronXS.AgendaXS.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Getter
 @Setter
-
+@Entity
 public class Usuario {
 
-
-        private Long id;
-        private String titulo;
-        private String descricao;
-        private LocalDate data;
-        private String emocao; // alegria, tristeza, raiva...
-        private boolean concluida;
-        private List<String> respostasGeradas; // respostas da IA baseadas na emoção
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto incremento
+    private Long id;
+    private String titulo;
+    private String descricao;
+    private LocalDate data;
+    private Sentimento emocao;
+    private boolean concluida;
+    private List<String> respostasGeradas;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, List<String> respostasGeradas, boolean concluida, String emocao, LocalDate data, String descricao, String titulo) {
+    public Usuario(Long id, String titulo, String descricao, LocalDate data, boolean concluida, Sentimento emocao, List<String> respostasGeradas) {
         this.id = id;
-        this.respostasGeradas = respostasGeradas;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.data = data;
         this.concluida = concluida;
         this.emocao = emocao;
-        this.data = data;
-        this.descricao = descricao;
-        this.titulo = titulo;
+        this.respostasGeradas = respostasGeradas;
     }
 
-    // Métodos
-        public void marcarComoConcluida() {
-            this.concluida = true;
-        }
-
-        public String gerarResposta() {
-            switch (emocao) {
-                case "tristeza":
-                    return "Não desanime! Vamos fazer isso juntos.";
-                case "alegria":
-                    return "Ótimo! Vamos aproveitar esse bom humor.";
-                case "raiva":
-                    return "Respira... depois voltamos a isso.";
-                default:
-                    return "Vamos seguir em frente com calma.";
-            }
-        }
+    public void marcarComoConcluida() {
+        this.concluida = true;
     }
 
+    public String gerarResposta() {
+        switch (emocao) {
+            case TRISTEZA:
+                return "Não desanime! Vamos fazer isso juntos.";
+            case ALEGRIA:
+                return "Ótimo! Vamos aproveitar esse bom humor.";
+            case RAIVA:
+                return "Respira... depois voltamos a isso.";
+            default:
+                return "Vamos seguir em frente com calma.";
+        }
+    }
+}
